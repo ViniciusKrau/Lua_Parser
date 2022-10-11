@@ -9,6 +9,7 @@
 FILE* source;
 
 treeNode* root = NULL;
+TokenType prevToken;
 
 treeNode* createnode(){
     treeNode* temp;
@@ -21,18 +22,31 @@ treeNode* createnode(){
     return temp;
 }
 
-void newnode(TokenType token, TokenType operando){
+treeNode* newnode(){
+    TokenType token = getToken();
+    if (token == ENDFILE || ) return;
     treeNode* node = createnode();
-    node->leftnode = createnode();
-    node->rightnode = createnode();
-    if (root == NULL){
-        root = node;
+    if (root == NULL) root = node;
+    if (isID){
+        if (isReserved(token)){
+            node->token = token;
+            node->type = RESERVED;
+            node->leftnode = newnode();
+        }
+        node->type = ID;
+        if(prevToken)
+        prevToken = ID;
     }
-    if (token == ID){
-        strcpy(node->name, "");
-    }
-    if (token == NUM){
-        node->rightnode;
+    switch (token){
+        case ID:{
+            if (isReserved(token)){
+
+            }
+            node->type = ID;
+            if(prevToken)
+            prevToken = ID;
+            break;
+        }
     }
 }
 

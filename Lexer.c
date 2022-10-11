@@ -99,8 +99,18 @@ struct {
 bType EOF_flag = false;  // Confirma se fgets conseguiu ler uma linha nova.
 char tokenString[MAXTOKENLEN+1];
 int tokenStringIndex = 0;
+int isID;
 char lineBuf[BUFLEN];        // linha atual
 int lineno = 0, linepos = 0, /* posicao em lineBuf */ bufsize = 0; /* tamanho atual da string no buffer */
+
+
+
+int isReserved(TokenType token){
+    int i;
+    for (i = 0; i < MAXRESERVED; i++)
+        if (token == reservedWords[i].tok) return 1;
+    return 0;
+}
 
 TokenType reservedLookup(char *s) {
     int i;
@@ -348,19 +358,13 @@ TokenType getToken() {
     if (save &&  (tokenStringIndex <= MAXTOKENLEN)) tokenString[tokenStringIndex++] = (char)c;
     if (state == DONE) {
         tokenString[tokenStringIndex] = '\0';
-        if (currentToken == ID) currentToken = reservedLookup(tokenString);
+        if (currentToken == ID) {
+            isID = 1;
+            currentToken = reservedLookup(tokenString);
+        }
     }
     }  // While state != DONE
     char tokenString[MAXTOKENLEN-1];
     tokenStringIndex = 0;
     return currentToken; // retorna o token definido
 }  // GetToken
-
-// void main(){
-//     char teste[30];
-//     FILE *source = fopen("lua.txt", "r+");
-//     FILE *output = fopen("output.txt", "w+");
-//     while (getToken(source) != ENDFILE){    }
-//     fclose(source);
-//     fclose(output);
-// }
