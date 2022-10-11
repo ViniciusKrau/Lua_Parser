@@ -103,19 +103,20 @@ char lineBuf[BUFLEN];        // linha atual
 int lineno = 0, linepos = 0, /* posicao em lineBuf */ bufsize = 0; /* tamanho atual da string no buffer */
 
 TokenType reservedLookup(char *s) {
-
     int i;
     for (i = 0; i < MAXRESERVED; i++)
         if (!strcmp(s, reservedWords[i].str)) return reservedWords[i].tok;
     return ID;
 }
 
-int totalchar(FILE* source){
+
+int totalchar(){
     int maxchar = 0;
     while(fgetc(source)) maxchar++;
+    rewind(source);
 }
 
-int getNextChar(FILE *source) { // Le uma linha e retorna o proximo caracter
+int getNextChar() { // Le uma linha e retorna o proximo caracter
     if (linepos >= bufsize) {  // Verifica se ja leu toda a linha guardada em linebuf
         lineno++;
         if (fgets(lineBuf, (BUFLEN - 1), source)) {  // Le uma linha do codigo fonte e guarda em linebuf
@@ -134,7 +135,7 @@ int ungetNextChar() {
     if (!EOF_flag) linepos--;
 }
 
-TokenType getToken(FILE* source) {
+TokenType getToken() {
     int c;
     bType save = true;
     TokenType currentToken;  // Token a ser retornado
